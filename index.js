@@ -196,7 +196,7 @@ dialog.matches("stockAnalyze",[
     var stock = results.response;
     var finalMsg = "";
     var url = "https://test3.blackrock.com/tools/hackathon/search-securities" +
-      "?filters=assetType%3AStock%2C%20countryCode%3AUS&useCache=true&queryField=description" + "&query=" + company;
+      "?filters=assetType%3AStock%2C%20countryCode%3AUS&useCache=true&queryField=description" + "&query=" + stock;
   https.get(url, function(res) {
       var body = '';
 
@@ -218,7 +218,7 @@ dialog.matches("stockAnalyze",[
                   var data = JSON.parse(body);
                   var performace = (data.oneDay * 100).toFixed(2);
                   //var performace = (data.resultMap.RETURNS[0].latestPerf.oneDay * 100).toFixed(2);
-                  finalMsg = stockName + "'s stock ";
+                  finalMsg = stock + "'s stock ";
                   if (performace < 0) {
                       finalMsg += "decreased by ";
                   } else {
