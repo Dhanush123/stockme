@@ -35,11 +35,11 @@ var company = "";
 
 dialog.matches('Greeting',[
    function (session) {
-        builder.Prompts.text(session, "Hello... What's your name?");
+        builder.Prompts.text(session, "Hello! What's your name?");
     },
     function (session, results) {
         session.userData.name = results.response;
-        builder.Prompts.attachment(session, "Hi " + results.response + "What picture would you like me to analyze for a logo?");
+        builder.Prompts.attachment(session, "Hi " + results.response + "! What picture would you like me to analyze for a logo?");
     },
     function (session, results) {
      console.log(results);
@@ -47,28 +47,6 @@ dialog.matches('Greeting',[
       var urle = "";
       urle = results.response[0].contentUrl;
       console.log("urle: "+urle);
-
-
-// var options = { method: 'POST',
-//   url: 'https://vision.googleapis.com/v1/images:annotate',
-//   qs: { key: 'AIzaSyCVP_E8hjQHzd4nRAC9wrnFfpzkvOuypl4' },
-//   headers:
-//    { 'postman-token': '0f5e9ef8-9037-a202-9750-ae59713705fb',
-//      'cache-control': 'no-cache',
-//      accept: 'application/json',
-//      'content-type': 'application/json' },
-//   body:
-//    { requests:
-//       [ { features: [ { type: 'LOGO_DETECTION', maxResults: 3 } ],
-//           image: { source: { imageUri: urle } } } ] },
-//   json: true };
-//
-// request(options, function (error, response, body) {
-//   if (error) throw new Error(error);
-//
-//   console.log(body);
-//   session.send('I believe this image contains the logo of ' + body.responses[0].logoAnnotations[0].description);
-// });
 
       request(urle, {encoding: 'binary'}, function(error, response, body) {
         // fs.writeFile('imgy.jpg', body, 'binary', function (err) {
@@ -94,7 +72,25 @@ dialog.matches('Greeting',[
               console.log("GOOGLE BODY2: "+JSON.stringify(body.responses));
               company = body.responses[0].logoAnnotations[0].description;
               console.log("descrip:"+company);
-              session.send('I believe this image contains the logo of ' + company);
+              var options = { method: 'GET',
+                url: 'https://test3.blackrock.com/tools/hackathon/search-securities',
+                qs:
+                 { filters: 'assetType:Stock, countryCode:US',
+                   useCache: 'true',
+                   queryField: 'description',
+                   query: company },
+                headers:
+                 {
+                   'cache-control': 'no-cache',
+                   accept: 'application/json',
+                   'content-type': 'application/json' } };
+
+              request(options, function (error, response, body) {
+                if (error) throw new Error(error);
+
+                console.log(body);
+                session.send('I believe this image contains the logo of ' + company + " and it has the ticker: " + body.resultMap.SEARCH_RESULTS[0].resultList[0].bloombergTicker);
+              });
               // console.log("GOOGLE BODY3: "+body.logoAnnotations.description);
             });
 
