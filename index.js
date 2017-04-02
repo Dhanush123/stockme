@@ -52,7 +52,7 @@ dialog.matches('Greeting',[
           throw new Error(error);
         }
         else{
-          console.log("GOOGLE BODY: "+body);
+          console.log("GOOGLE BODY: "+JSON.parse(body));
         }
       });
     }
