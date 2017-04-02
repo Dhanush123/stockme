@@ -50,7 +50,7 @@ dialog.matches('Greeting',[
         if (error) throw new Error("GOOGLE ERROR: " + error);
 
         console.log("GOOGLE BODY1: "+body);
-        console.log("GOOGLE BODY2: "+body.responses[0].logoAnnotations.description);
+        console.log("GOOGLE BODY2: "+body.responses[0].logoAnnotations[0].description);
         // console.log("GOOGLE BODY3: "+body.logoAnnotations.description);
       });
     }
