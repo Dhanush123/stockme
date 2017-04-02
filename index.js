@@ -46,7 +46,7 @@ dialog.matches('Greeting',[
          };
 
          crawler.crawl(opts, function(err, data) {
-            console.log('Downloaded %d from %s', data.imgs.length, opts.url);
+            // console.log('Downloaded %d from %s', data.imgs.length, opts.url);
             cloudinary.uploader.upload('imgy.png', function(result) { console.log(result) },
                                        { public_id: "imgy" });
 
