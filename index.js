@@ -120,7 +120,7 @@ dialog.matches("bestFund",[
                  });
 
           res.on('end', function () {
-
+                var data = JSON.parse(body);
                  var fundName = data.resultMap.SEARCH_RESULTS[0].resultList[0].fundFamilyName;
                  var finalMsg = fundName+" is a great fund based on my analysis!";
                  session.send(finalMsg);
@@ -148,7 +148,7 @@ dialog.matches("portfAnalysis",[
 
              res.on('end', function () {
             var finalMsg;
-
+              var data = JSON.parse(body);
             var performance = 0;
             var yearMonthDay = results.response;
             if (yearMonthDay === "year") {
@@ -205,7 +205,7 @@ dialog.matches("stockAnalyze",[
       });
 
       res.on('end', function() {
-
+        var data = JSON.parse(body);
           var url2 = "https://test3.blackrock.com/tools/hackathon/performance?identifiers=" + stock + "&outputDataExpression=resultMap['RETURNS'][0].latestPerf" + "&useCache=true";
           https.get(url2, function(res) {
               var body = '';
@@ -215,7 +215,7 @@ dialog.matches("stockAnalyze",[
               });
 
               res.on('end', function() {
-
+                var data = JSON.parse(body);
                   var performace = (data.oneDay * 100).toFixed(2);
                   //var performace = (data.resultMap.RETURNS[0].latestPerf.oneDay * 100).toFixed(2);
                   finalMsg = stock + "'s stock ";
@@ -259,7 +259,7 @@ dialog.matches("stocksCompare",[
       });
 
       res.on('end', function() {
-
+          var data = JSON.parse(body);
           var url = "https://test3.blackrock.com/tools/hackathon/performance?identifiers=" + two[0] + "&outputDataExpression=resultMap['RETURNS'][0].latestPerf" + "&useCache=true";
           https.get(url, function(res) {
               var body = '';
@@ -282,7 +282,7 @@ dialog.matches("stocksCompare",[
                     });
 
                     res.on('end', function() {
-
+                      var data = JSON.parse(body);
                         var url3 = "https://test3.blackrock.com/tools/hackathon/performance?identifiers=" + two[1] + "&outputDataExpression=resultMap['RETURNS'][0].latestPerf" + "&useCache=true";
                         https.get(url3, function(res) {
                             var body = '';
@@ -292,7 +292,7 @@ dialog.matches("stocksCompare",[
                             });
 
                             res.on('end', function() {
-
+                                var data = JSON.parse(body);
                                 performace2 = (data.oneDay * 100).toFixed(2);
 
                                 if(performace2 > performace1){
