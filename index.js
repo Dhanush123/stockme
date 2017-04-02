@@ -1,7 +1,6 @@
 var builder = require('botbuilder');
 var restify = require('restify');
 var request = require('request');
-const Vision = require('@google-cloud/vision');
 const vision = Vision();
 
 var botConnectorOptions = {
@@ -53,12 +52,5 @@ dialog.matches('Greeting',[
 
         console.log(body);
       });
-      // vision.detectLogos(results.response.contentUrl)
-      // .then((results) => {
-      //   const logos = results[0];
-      //
-      //   console.log('Logos:');
-      //   logos.forEach((logo) => console.log(logo));
-      // });
     }
 ]);
