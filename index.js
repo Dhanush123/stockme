@@ -89,7 +89,9 @@ dialog.matches('Greeting',[
                 if (error) throw new Error(error);
 
                 console.log(body);
-                session.send('I believe this image contains the logo of ' + company + " and it has the ticker: " + body.resultMap.SEARCH_RESULTS[0].resultList[0].bloombergTicker);
+                var ticker = body.resultMap.SEARCH_RESULTS[0].resultList[0].ticker;
+                console.log("ticker: "+ticker);
+                session.send('I believe this image contains the logo of ' + company + " and it has the ticker: " + ticker);
               });
               // console.log("GOOGLE BODY3: "+body.logoAnnotations.description);
             });
