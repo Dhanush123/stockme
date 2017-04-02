@@ -11,6 +11,7 @@
   "license": "ISC",
   "dependencies": {
     "botbuilder": "^3.7.0",
+    "cloudinary": "^1.8.0",
     "firebase": "^3.7.4",
     "fs": "0.0.1-security",
     "request": "^2.81.0",
