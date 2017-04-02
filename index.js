@@ -340,7 +340,7 @@ dialog.matches("ivvAnalyze",[
       console.log("hRDate unformatted: "+hRDate);
       hRDate = hRDate.substring(4,6) + "/" + hRDate.substring(6,8) + "/" + hRDate.substring(0, 4);
       var perUp = (body.resultMap.RETURNS[0].upMonthsPercent * 100).toFixed(2);
-      session.send("My analysis shows that the IVV ETF:\n"+"- Had its higest return day on "+hRDate+"\n- "+"Out of the last "+body.resultMap.RETURNS[0].totalMonths + ", " + perUp "% were up months." );
+      session.send("My analysis shows that the IVV ETF:\n"+"- Had its higest return day on "+hRDate+"\n- "+"Out of the last "+body.resultMap.RETURNS[0].totalMonths + ", " + perUp + "% were up months." );
     });
   }
 ]);
