@@ -282,7 +282,6 @@ dialog.matches("stocksCompare",[
                     });
 
                     res.on('end', function() {
-                      var data = JSON.parse(body);
                         var url3 = "https://test3.blackrock.com/tools/hackathon/performance?identifiers=" + two[1] + "&outputDataExpression=resultMap['RETURNS'][0].latestPerf" + "&useCache=true";
                         https.get(url3, function(res) {
                             var body = '';
