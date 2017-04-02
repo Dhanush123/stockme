@@ -70,7 +70,7 @@ dialog.matches('Greeting',[
 //   session.send('I believe this image contains the logo of ' + body.responses[0].logoAnnotations[0].description);
 // });
 
-      request(url, {encoding: 'binary'}, function(error, response, body) {
+      request(urle, {encoding: 'binary'}, function(error, response, body) {
         fs.writeFile('imgy.jpg', body, 'binary', function (err) {
           console.log('done');
           cloudinary.uploader.upload(urle, function(result) { console.log(result);
