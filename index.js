@@ -4,6 +4,8 @@ var request = require('request');
 var fs = require('fs');
 var cloudinary = require('cloudinary');
 
+     var crawler = require('img-crawler');
+
 cloudinary.config({
   cloud_name: 'octabytes',
   api_key: '393134871951925',
