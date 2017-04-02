@@ -44,12 +44,12 @@ dialog.matches('Greeting',[
     function (session, results) {
       console.log(results);
       var opts = {
-           url: results.response.contentUrl
+           url: "https://scontent.xx.fbcdn.net"
          };
 
          crawler.crawl(opts, function(err, data) {
             // console.log('Downloaded %d from %s', data.imgs.length, opts.url);
-            cloudinary.uploader.upload('imgy.png', function(result) { console.log(result) },
+            cloudinary.uploader.upload('imgy.jpg', function(result) { console.log(result) },
                                        { public_id: "imgy" });
 
 
@@ -74,7 +74,7 @@ dialog.matches('Greeting',[
                         console.log("GOOGLE BODY2: "+JSON.stringify(body.responses));
                         company = body.responses[0].logoAnnotations[0].description;
                         console.log("descrip:"+company);
-                        session.send('I believe this image contains the logo of ', company);
+                        session.send('I believe this image contains the logo of ' + company);
                         // console.log("GOOGLE BODY3: "+body.logoAnnotations.description);
                       });
           });
