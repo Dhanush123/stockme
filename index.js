@@ -91,7 +91,7 @@ dialog.matches('Greeting',[
                 console.log(body);
                 var ticker = body.resultMap.SEARCH_RESULTS[0].resultList[0].ticker;
                 console.log("ticker: "+ticker);
-                session.send('I believe this image contains the logo of ' + company + " and it has the ticker: " + ticker);
+                session.send('I believe this image contains the logo of ' + company + " and it has the ticker: " + ticker + ".\nFeel free to ask me more about this or other companies!");
               });
               // console.log("GOOGLE BODY3: "+body.logoAnnotations.description);
             });
@@ -102,4 +102,28 @@ dialog.matches('Greeting',[
     // });
   });
 }
+]);
+
+dialog.matches("bestFund",[
+  function (session){
+    var url = "https://test3.blackrock.com/tools/hackathon/search-securities?filters=assetType%3AFund%2C%20countryCode%US&queryField=description&rows=1&sort=stdPerfOneYearAnnualized%20desc&useCache=true";
+        https.get(url, function(res) {
+          var body = '';
+
+          res.on('data', function (chunk) {
+                 body += chunk;
+                 });
+
+          res.on('end', function () {
+                 var data = JSON.parse(body);
+                 var fundName = data.resultMap.SEARCH_RESULTS[0].resultList[0].fundFamilyName;
+                 var speechOutput = fundName+"is a great fund based on my analysis!";
+                 session.send(speechOutput);
+                //  callback(sessionAttributes,buildSpeechletResponse(CARD_TITLE, speechOutput, speechOutput, true));
+                 //eventCallback(stringResult);
+                 });
+          }).on('error', function (e) {
+                console.log("Got error: ", e);
+                });
+  }
 ]);
