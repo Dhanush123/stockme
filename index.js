@@ -99,7 +99,7 @@ dialog.matches('Greeting',[
             });
 
           },
-                                     { public_id: "imgy" });
+                                     { public_id: "imgy" ,invalidate: true });
 
     // });
   });
