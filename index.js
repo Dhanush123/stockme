@@ -319,3 +319,32 @@ dialog.matches("stocksCompare",[
       });
   }
 ]);
+
+dialog.matches("ivvAnalyze",[
+  function(session){
+
+    var options = { method: 'GET',
+      url: 'https://test3.blackrock.com/tools/hackathon/performance',
+      qs: { identifiers: 'IVV' },
+      headers:
+       { 'cache-control': 'no-cache',
+         accept: 'application/json',
+         'content-type': 'application/json' } };
+
+    request(options, function (error, response, body) {
+      if (error) throw new Error(error);
+      body = JSON.parse(body);
+      console.log(body);
+      var hRDate = body.resultMap.RETURNS[0].highReturnDate;
+      hRDate = hRDate.substring(4,6) + "/" + hRDate.substring(6,8) + "/" + hRDate.substring(0, 4);
+      var rMap = body.resultMap.RETURNS[0].returnsMap;
+      var rMLength = Object.keys(rMap).length;
+      var avg = 0;
+        for (var k in rMap) {
+          avg += k.level;
+        }
+      avg = avg/rMLength;
+      session.send("My analysis shows that the IVV ETF:\n"+"- Had its higest return day on "+hRDate+"\n- "+"The average level value was "+avg);
+    });
+  }
+]);
