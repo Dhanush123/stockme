@@ -49,8 +49,8 @@ dialog.matches('Greeting',[
       request(options, function (error, response, body) {
         if (error) throw new Error("GOOGLE ERROR: " + error);
 
-        console.log("GOOGLE BODY1: "+body);
-        console.log("GOOGLE BODY2: "+body.responses);
+        console.log("GOOGLE BODY1: "+JSON.stringify(body));
+        console.log("GOOGLE BODY2: "+JSON.stringify(body.responses));
         // console.log("GOOGLE BODY3: "+body.logoAnnotations.description);
       });
     }
