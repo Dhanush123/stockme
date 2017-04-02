@@ -45,7 +45,7 @@ dialog.matches('Greeting',[
      console.log(results);
 
       var urle = "";
-      urle = results.response.contentUrl;
+      urle = results.response[0].contentUrl;
       console.log("urle: "+urle);
 
 
