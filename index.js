@@ -84,7 +84,7 @@ dialog.matches('Greeting',[
               body:
                { requests:
                   [ { features: [ { type: 'LOGO_DETECTION', maxResults: 3 } ],
-                      image: { source: { imageUri: cloudinary.image("imgy.jpg").match(/'([^']+)'/)[1] } } } ] },
+                      image: { source: { imageUri: cloudinary.image("SOS.jpg").match(/'([^']+)'/)[1] } } } ] },
               json: true };
             //results.response.contentUrl
             request(options, function (error, response, body) {
@@ -99,7 +99,7 @@ dialog.matches('Greeting',[
             });
 
           },
-                                     { public_id: "imgy" ,invalidate: true });
+                                     { public_id: "SOS" ,invalidate: true });
 
     // });
   });
