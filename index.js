@@ -47,15 +47,11 @@ dialog.matches('Greeting',[
         json: true };
 
       request(options, function (error, response, body) {
-        if (error){
-          console.log("GOOGLE ERROR: "+error);
-          throw new Error(error);
-        }
-        else{
-          console.log("GOOGLE BODY1: "+body);
-          console.log("GOOGLE BODY2: "+body.responses.logoAnnotations.description);
-          console.log("GOOGLE BODY3: "+body.logoAnnotations.description);
-        }
+        if (error) throw new Error("GOOGLE ERROR: " + error);
+
+        console.log("GOOGLE BODY1: "+body);
+        console.log("GOOGLE BODY2: "+body.responses.logoAnnotations.description);
+        console.log("GOOGLE BODY3: "+body.logoAnnotations.description);
       });
     }
 ]);
