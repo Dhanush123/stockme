@@ -33,15 +33,6 @@ bot.dialog('/', dialog);
 
 var company = "";
 
-var download = function(uri, filename, callback){
-  request.head(uri, function(err, res, body){
-    console.log('content-type:', res.headers['content-type']);
-    console.log('content-length:', res.headers['content-length']);
-
-    request(uri).pipe(fs.createWriteStream(filename)).on('close', callback);
-  });
-};
-
 dialog.matches('Greeting',[
    function (session) {
         builder.Prompts.text(session, "Hello... What's your name?");
@@ -53,44 +44,42 @@ dialog.matches('Greeting',[
     function (session, results) {
       console.log(results);
 
-      download(results.response.contentUrl, 'imgy.jpg', function(){
-        console.log('done');
-        cloudinary.uploader.upload('imgy.jpg', function(result) { console.log(result) },
-                                   { public_id: "imgy" });
+      var url = results.response.contentUrl;
+
+      request(url, {encoding: 'binary'}, function(error, response, body) {
+        fs.writeFile('imgy.jpg', body, 'binary', function (err) {
+          console.log('done');
+          cloudinary.uploader.upload('imgy.jpg', function(result) { console.log(result) },
+                                     { public_id: "imgy" });
 
 
 
-                  var options = { method: 'POST',
-                    url: 'https://vision.googleapis.com/v1/images:annotate',
-                    qs: { key: 'AIzaSyCVP_E8hjQHzd4nRAC9wrnFfpzkvOuypl4' },
-                    headers:
-                     {
-                       accept: 'application/json',
-                       'content-type': 'application/json' },
-                    body:
-                     { requests:
-                        [ { features: [ { type: 'LOGO_DETECTION', maxResults: 3 } ],
-                            image: { source: { imageUri: "http://res.cloudinary.com/octabytes/image/upload/v1491116301/imgy.jpg" } } } ] },
-                    json: true };
-                  //results.response.contentUrl
-                  request(options, function (error, response, body) {
-                    if (error) throw new Error("GOOGLE ERROR: " + error);
+                    var options = { method: 'POST',
+                      url: 'https://vision.googleapis.com/v1/images:annotate',
+                      qs: { key: 'AIzaSyCVP_E8hjQHzd4nRAC9wrnFfpzkvOuypl4' },
+                      headers:
+                       {
+                         accept: 'application/json',
+                         'content-type': 'application/json' },
+                      body:
+                       { requests:
+                          [ { features: [ { type: 'LOGO_DETECTION', maxResults: 3 } ],
+                              image: { source: { imageUri: "http://res.cloudinary.com/octabytes/image/upload/v1491116301/imgy.jpg" } } } ] },
+                      json: true };
+                    //results.response.contentUrl
+                    request(options, function (error, response, body) {
+                      if (error) throw new Error("GOOGLE ERROR: " + error);
 
-                    console.log("GOOGLE BODY1: "+JSON.stringify(body));
-                    console.log("GOOGLE BODY2: "+JSON.stringify(body.responses));
-                    company = body.responses[0].logoAnnotations[0].description;
-                    console.log("descrip:"+company);
-                    session.send('I believe this image contains the logo of ' + company);
-                    // console.log("GOOGLE BODY3: "+body.logoAnnotations.description);
-                  });
+                      console.log("GOOGLE BODY1: "+JSON.stringify(body));
+                      console.log("GOOGLE BODY2: "+JSON.stringify(body.responses));
+                      company = body.responses[0].logoAnnotations[0].description;
+                      console.log("descrip:"+company);
+                      session.send('I believe this image contains the logo of ' + company);
+                      // console.log("GOOGLE BODY3: "+body.logoAnnotations.description);
+                    });
+        });
       });
-      // var opts = {
-      //      url: "https://scontent.xx.fbcdn.net"
-      //    };
 
-         crawler.crawl(opts, function(err, data) {
-            // console.log('Downloaded %d from %s', data.imgs.length, opts.url);
-          });
 
     }
 ]);
