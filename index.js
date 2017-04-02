@@ -87,7 +87,7 @@ dialog.matches('Greeting',[
 
               request(options, function (error, response, body) {
                 if (error) throw new Error(error);
-
+                body = JSON.parse(body);
                 console.log(body);
                 var ticker = body.resultMap.SEARCH_RESULTS[0].resultList[0].ticker;
                 console.log("ticker: "+ticker);
