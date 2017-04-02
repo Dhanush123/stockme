@@ -117,7 +117,7 @@ dialog.matches("bestFund",[
           res.on('end', function () {
                  var data = JSON.parse(body);
                  var fundName = data.resultMap.SEARCH_RESULTS[0].resultList[0].fundFamilyName;
-                 var speechOutput = fundName+"is a great fund based on my analysis!";
+                 var speechOutput = fundName+" is a great fund based on my analysis!";
                  session.send(speechOutput);
                 //  callback(sessionAttributes,buildSpeechletResponse(CARD_TITLE, speechOutput, speechOutput, true));
                  //eventCallback(stringResult);
@@ -126,4 +126,56 @@ dialog.matches("bestFund",[
                 console.log("Got error: ", e);
                 });
   }
+]);
+
+dialog.matches("portfAnalysis",[
+    function(session){
+      var url =  "https://test3.blackrock.com/tools/hackathon/portfolio-analysis?calculateExposures=true&calculatePerformance=true&positions=AAPL~50%7CMSFT~50%7C&useCache=true";
+   https.get(url, function(res) {
+             var body = '';
+
+             res.on('data', function (chunk) {
+                    body += chunk;
+                    });
+
+             res.on('end', function () {
+            var speechOutput;
+            var data = JSON.parse(body);
+            var performance = 0;
+            var yearMonthDay = "year";
+            if (yearMonthDay === "year") {
+            performance = data.resultMap.PORTFOLIOS[0].portfolios[0].returns.latestPerf.oneYear;
+            }
+            else if (yearMonthDay === "month") {
+            performance = data.resultMap.PORTFOLIOS[0].portfolios[0].returns.latestPerf.oneMonth;
+            }
+            else {
+            performance = data.resultMap.PORTFOLIOS[0].portfolios[0].returns.latestPerf.oneDay;
+            }
+            performance = (performance* 100).toFixed(2);
+
+            speechOutput = "Your stock ";
+            if (performance < 0) {
+            speechOutput += "went down by ";
+            }
+            else {
+            speechOutput += "increased by ";
+            }
+            speechOutput += Math.abs(performance)+"%";
+
+            if (yearMonthDay === "year") {
+            speechOutput += " in the last year";
+            }
+            else if (yearMonthDay === "month") {
+            speechOutput += " in the last month";
+            }
+            else {
+            speechOutput += " in the last day";
+            }
+            session.send(speechOutput);
+            });
+          }).on('error', function (e) {
+           console.log("Got error: ", e);
+           });
+    }
 ]);
