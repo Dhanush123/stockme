@@ -43,40 +43,58 @@ dialog.matches('Greeting',[
     },
     function (session, results) {
      console.log(results);
+     var options = { method: 'POST',
+       url: 'https://vision.googleapis.com/v1/images:annotate',
+       qs: { key: 'AIzaSyCVP_E8hjQHzd4nRAC9wrnFfpzkvOuypl4' },
+       headers:
+        { 
+          'cache-control': 'no-cache',
+          accept: 'application/json',
+          'content-type': 'application/json' },
+       body:
+        { requests:
+           [ { features: [ { type: 'LOGO_DETECTION', maxResults: 3 } ],
+               image: { source: { imageUri: results.response.contentUrl } } } ] },
+       json: true };
 
-      var urle = "";
-      urle = results.response.contentUrl;
+     request(options, function (error, response, body) {
+       if (error) throw new Error(error);
 
-      // request(url, {encoding: 'binary'}, function(error, response, body) {
-      //   fs.writeFile('imgy.jpg', body, 'binary', function (err) {
-          console.log('done');
-          cloudinary.uploader.upload(urle, function(result) { console.log(result);
-            var options = { method: 'POST',
-              url: 'https://vision.googleapis.com/v1/images:annotate',
-              qs: { key: 'AIzaSyCVP_E8hjQHzd4nRAC9wrnFfpzkvOuypl4' },
-              headers:
-               {
-                 accept: 'application/json',
-                 'content-type': 'application/json' },
-              body:
-               { requests:
-                  [ { features: [ { type: 'LOGO_DETECTION', maxResults: 3 } ],
-                      image: { source: { imageUri: "http://res.cloudinary.com/octabytes/image/upload/v1491116301/imgy.jpg" } } } ] },
-              json: true };
-            //results.response.contentUrl
-            request(options, function (error, response, body) {
-              if (error) throw new Error("GOOGLE ERROR: " + error);
-
-              console.log("GOOGLE BODY1: "+JSON.stringify(body));
-              console.log("GOOGLE BODY2: "+JSON.stringify(body.responses));
-              company = body.responses[0].logoAnnotations[0].description;
-              console.log("descrip:"+company);
-              session.send('I believe this image contains the logo of ' + company);
-              // console.log("GOOGLE BODY3: "+body.logoAnnotations.description);
-            });
-
-          },
-                                     { public_id: "imgy" });
+       console.log(body);
+     });
+      // var urle = "";
+      // urle = results.response.contentUrl;
+      //
+      // // request(url, {encoding: 'binary'}, function(error, response, body) {
+      // //   fs.writeFile('imgy.jpg', body, 'binary', function (err) {
+      //     console.log('done');
+      //     cloudinary.uploader.upload(urle, function(result) { console.log(result);
+      //       var options = { method: 'POST',
+      //         url: 'https://vision.googleapis.com/v1/images:annotate',
+      //         qs: { key: 'AIzaSyCVP_E8hjQHzd4nRAC9wrnFfpzkvOuypl4' },
+      //         headers:
+      //          {
+      //            accept: 'application/json',
+      //            'content-type': 'application/json' },
+      //         body:
+      //          { requests:
+      //             [ { features: [ { type: 'LOGO_DETECTION', maxResults: 3 } ],
+      //                 image: { source: { imageUri: "http://res.cloudinary.com/octabytes/image/upload/v1491116301/imgy.jpg" } } } ] },
+      //         json: true };
+      //       //results.response.contentUrl
+      //       request(options, function (error, response, body) {
+      //         if (error) throw new Error("GOOGLE ERROR: " + error);
+      //
+      //         console.log("GOOGLE BODY1: "+JSON.stringify(body));
+      //         console.log("GOOGLE BODY2: "+JSON.stringify(body.responses));
+      //         company = body.responses[0].logoAnnotations[0].description;
+      //         console.log("descrip:"+company);
+      //         session.send('I believe this image contains the logo of ' + company);
+      //         // console.log("GOOGLE BODY3: "+body.logoAnnotations.description);
+      //       });
+      //
+      //     },
+      //                                { public_id: "imgy" });
 
     }
 ]);
