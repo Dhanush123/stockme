@@ -42,7 +42,7 @@ dialog.matches('Greeting',[
         builder.Prompts.attachment(session, "Hi " + results.response + "What picture would you like me to analyze for a logo?");
     },
     function (session, results) {
-      console.log(results);
+      // console.log(results);
 
       var url = results.response.contentUrl;
 
