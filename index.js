@@ -71,7 +71,7 @@ dialog.matches('Greeting',[
 // });
 
       request(urle, {encoding: 'binary'}, function(error, response, body) {
-        fs.writeFile('imgy.jpg', body, 'binary', function (err) {
+        // fs.writeFile('imgy.jpg', body, 'binary', function (err) {
           console.log('done');
           cloudinary.uploader.upload(urle, function(result) { console.log(result);
             var options = { method: 'POST',
@@ -101,7 +101,7 @@ dialog.matches('Greeting',[
           },
                                      { public_id: "imgy" });
 
-    });
+    // });
   });
 }
 ]);
