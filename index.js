@@ -70,10 +70,10 @@ dialog.matches('Greeting',[
 
                         console.log("GOOGLE BODY1: "+JSON.stringify(body));
                         console.log("GOOGLE BODY2: "+JSON.stringify(body.responses));
+                        session.send('I believe this image contains the logo of ', body.responses[0].logoAnnotations[0].description);
                         // console.log("GOOGLE BODY3: "+body.logoAnnotations.description);
                       });
           });
-
 
     }
 ]);
