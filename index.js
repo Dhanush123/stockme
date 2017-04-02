@@ -117,9 +117,9 @@ dialog.matches("bestFund",[
           res.on('end', function () {
                  var data = JSON.parse(body);
                  var fundName = data.resultMap.SEARCH_RESULTS[0].resultList[0].fundFamilyName;
-                 var speechOutput = fundName+" is a great fund based on my analysis!";
-                 session.send(speechOutput);
-                //  callback(sessionAttributes,buildSpeechletResponse(CARD_TITLE, speechOutput, speechOutput, true));
+                 var finalMsg = fundName+" is a great fund based on my analysis!";
+                 session.send(finalMsg);
+                //  callback(sessionAttributes,buildSpeechletResponse(CARD_TITLE, finalMsg, finalMsg, true));
                  //eventCallback(stringResult);
                  });
           }).on('error', function (e) {
@@ -142,7 +142,7 @@ dialog.matches("portfAnalysis",[
                     });
 
              res.on('end', function () {
-            var speechOutput;
+            var finalMsg;
             var data = JSON.parse(body);
             var performance = 0;
             var yearMonthDay = results.response;
@@ -157,28 +157,81 @@ dialog.matches("portfAnalysis",[
             }
             performance = (performance* 100).toFixed(2);
 
-            speechOutput = "Your stock ";
+            finalMsg = "Your stock ";
             if (performance < 0) {
-            speechOutput += "went down by ";
+            finalMsg += "went down by ";
             }
             else {
-            speechOutput += "increased by ";
+            finalMsg += "increased by ";
             }
-            speechOutput += Math.abs(performance)+"%";
+            finalMsg += Math.abs(performance)+"%";
 
             if (yearMonthDay === "year") {
-            speechOutput += " in the last year";
+            finalMsg += " in the last year";
             }
             else if (yearMonthDay === "month") {
-            speechOutput += " in the last month";
+            finalMsg += " in the last month";
             }
             else {
-            speechOutput += " in the last day";
+            finalMsg += " in the last day";
             }
-            session.send(speechOutput);
+            session.send(finalMsg);
             });
           }).on('error', function (e) {
            console.log("Got error: ", e);
            });
     }
+]);
+
+dialog.matches("stockAnalyze",[
+  function(session){
+    builder.Prompts.text(session,"Which stock do you want to analyze? (Ticker name is appreciated)");
+  },
+  function(session,results){
+    var stock = results.response;
+    var finalMsg = "";
+    var url = "https://test3.blackrock.com/tools/hackathon/search-securities" +
+      "?filters=assetType%3AStock%2C%20countryCode%3AUS&useCache=true&queryField=description" + "&query=" + company;
+  https.get(url, function(res) {
+      var body = '';
+
+      res.on('data', function(chunk) {
+          body += chunk;
+      });
+
+      res.on('end', function() {
+          var data = JSON.parse(body);
+          var url2 = "https://test3.blackrock.com/tools/hackathon/performance?identifiers=" + stock + "&outputDataExpression=resultMap['RETURNS'][0].latestPerf" + "&useCache=true";
+          https.get(url2, function(res) {
+              var body = '';
+
+              res.on('data', function(chunk) {
+                  body += chunk;
+              });
+
+              res.on('end', function() {
+                  var data = JSON.parse(body);
+                  var performace = (data.oneDay * 100).toFixed(2);
+                  //var performace = (data.resultMap.RETURNS[0].latestPerf.oneDay * 100).toFixed(2);
+                  finalMsg = stockName + "'s stock ";
+                  if (performace < 0) {
+                      finalMsg += "decreased by ";
+                  } else {
+                      finalMsg += "went up by ";
+                  }
+                  finalMsg += Math.abs(performace) + "%";
+
+                  callback(sessionAttributes,
+                      buildSpeechletResponse(CARD_TITLE, finalMsg, finalMsg, true));
+                  //eventCallback(stringResult);
+              });
+          }).on('error', function(e) {
+              console.log("Got error: ", e);
+          });
+              //eventCallback(stringResult);
+          });
+      }).on('error', function(e) {
+          console.log("Got error: ", e);
+      });
+  }
 ]);
