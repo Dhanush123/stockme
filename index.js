@@ -42,14 +42,15 @@ dialog.matches('Greeting',[
         builder.Prompts.attachment(session, "Hi " + results.response + "What picture would you like me to analyze for a logo?");
     },
     function (session, results) {
-      // console.log(results);
+     console.log(results);
 
-      var url = results.response.contentUrl;
+      var url = "";
+      url = results.response.contentUrl;
 
-      request(url, {encoding: 'binary'}, function(error, response, body) {
-        fs.writeFile('imgy.jpg', body, 'binary', function (err) {
+      // request(url, {encoding: 'binary'}, function(error, response, body) {
+      //   fs.writeFile('imgy.jpg', body, 'binary', function (err) {
           console.log('done');
-          cloudinary.uploader.upload('imgy.jpg', function(result) { console.log(result) },
+          cloudinary.uploader.upload(results.response.contentUrl, function(result) { console.log(result) },
                                      { public_id: "imgy" });
 
 
@@ -77,8 +78,8 @@ dialog.matches('Greeting',[
                       session.send('I believe this image contains the logo of ' + company);
                       // console.log("GOOGLE BODY3: "+body.logoAnnotations.description);
                     });
-        });
-      });
+        // });
+      // });
 
 
     }
