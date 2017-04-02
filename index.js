@@ -226,8 +226,7 @@ dialog.matches("stockAnalyze",[
                   }
                   finalMsg += Math.abs(performace) + "%";
 
-                  callback(sessionAttributes,
-                      buildSpeechletResponse(CARD_TITLE, finalMsg, finalMsg, true));
+                  session.send(finalMsg);
                   //eventCallback(stringResult);
               });
           }).on('error', function(e) {
