@@ -13,6 +13,7 @@
   "dependencies": {
     "@google-cloud/vision": "^0.11.0",
     "botbuilder": "^3.7.0",
+    "fs": "0.0.1-security",
     "google-cloud": "^0.50.0",
     "request": "^2.81.0",
     "restify": "^4.3.0"

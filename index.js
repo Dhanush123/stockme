@@ -1,6 +1,12 @@
 var builder = require('botbuilder');
 var restify = require('restify');
 var request = require('request');
+var fs = require('fs');
+// Imports the Google Cloud client library
+const Vision = require('@google-cloud/vision');
+
+// Instantiates a client
+const vision = Vision();
 
 var botConnectorOptions = {
   appId: "c8431942-19ab-42a1-b6c1-457eb8398648",
@@ -31,27 +37,49 @@ dialog.matches('Greeting',[
     },
     function (session, results) {
       console.log(results);
-      var request = require("request");
 
-      var options = { method: 'POST',
-        url: 'https://vision.googleapis.com/v1/images:annotate',
-        qs: { key: 'AIzaSyCVP_E8hjQHzd4nRAC9wrnFfpzkvOuypl4' },
-        headers:
-         {
-           accept: 'application/json',
-           'content-type': 'application/json' },
-        body:
-         { requests:
-            [ { features: [ { type: 'LOGO_DETECTION', maxResults: 3 } ],
-                image: { source: { imageUri: results.response.contentUrl } } } ] },
-        json: true };
-//results.response.contentUrl
-      request(options, function (error, response, body) {
-        if (error) throw new Error("GOOGLE ERROR: " + error);
+      var download = function(uri, filename, callback){
+        request.head(uri, function(err, res, body){
+          console.log('content-type:', res.headers['content-type']);
+          console.log('content-length:', res.headers['content-length']);
 
-        console.log("GOOGLE BODY1: "+JSON.stringify(body));
-        console.log("GOOGLE BODY2: "+JSON.stringify(body.responses));
-        // console.log("GOOGLE BODY3: "+body.logoAnnotations.description);
+          request(uri).pipe(fs.createWriteStream(filename)).on('close', callback);
+        });
+      };
+
+      download('https://www.google.com/images/srpr/logo3w.png', 'imgy.png', function(){
+        console.log('done');
+      // The path to the local image file, e.g. "/path/to/image.png"
+      // const fileName = '/path/to/image.png';
+
+      // Performs logo detection on the local file
+      vision.detectLogos("imgy.png")
+        .then((results) => {
+          const logos = results[0];
+
+          console.log('Logos:');
+          logos.forEach((logo) => console.log(logo));
+        });
+        // var options = { method: 'POST',
+        //   url: 'https://vision.googleapis.com/v1/images:annotate',
+        //   qs: { key: 'AIzaSyCVP_E8hjQHzd4nRAC9wrnFfpzkvOuypl4' },
+        //   headers:
+        //    {
+        //      accept: 'application/json',
+        //      'content-type': 'application/json' },
+        //   body:
+        //    { requests:
+        //       [ { features: [ { type: 'LOGO_DETECTION', maxResults: 3 } ],
+        //           image: { source: { imageUri: 'imgy.png' } } } ] },
+        //   json: true };
+        // //results.response.contentUrl
+        // request(options, function (error, response, body) {
+        //   if (error) throw new Error("GOOGLE ERROR: " + error);
+        //
+        //   console.log("GOOGLE BODY1: "+JSON.stringify(body));
+        //   console.log("GOOGLE BODY2: "+JSON.stringify(body.responses));
+        //   // console.log("GOOGLE BODY3: "+body.logoAnnotations.description);
+        // });
       });
     }
 ]);
