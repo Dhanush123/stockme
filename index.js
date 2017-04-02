@@ -48,7 +48,8 @@ dialog.matches('Greeting',[
       };
 
       download('https://www.google.com/images/srpr/logo3w.png', 'imgy.png', function(){
-        console.log('done');
+        console.log('doneeee');
+        console.log("DFSDGSDFGSDFSD");
       // The path to the local image file, e.g. "/path/to/image.png"
       // const fileName = '/path/to/image.png';
 
@@ -60,6 +61,8 @@ dialog.matches('Greeting',[
           console.log('Logos:');
           logos.forEach((logo) => console.log(logo));
         });
+        //hii
+
         // var options = { method: 'POST',
         //   url: 'https://vision.googleapis.com/v1/images:annotate',
         //   qs: { key: 'AIzaSyCVP_E8hjQHzd4nRAC9wrnFfpzkvOuypl4' },
