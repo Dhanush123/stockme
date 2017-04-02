@@ -2,11 +2,19 @@ var builder = require('botbuilder');
 var restify = require('restify');
 var request = require('request');
 var fs = require('fs');
-// Imports the Google Cloud client library
-const Vision = require('@google-cloud/vision');
+var firebase = require("firebase");
 
-// Instantiates a client
-const vision = Vision();
+var config = {
+  apiKey: "AIzaSyAeE2nmOHgdjCn50AWMztNIHu4hC4KJ8Gw",
+    authDomain: "la-hacks-2017-4d868.firebaseapp.com",
+    databaseURL: "https://la-hacks-2017-4d868.firebaseio.com",
+    projectId: "la-hacks-2017-4d868",
+    storageBucket: "la-hacks-2017-4d868.appspot.com",
+    messagingSenderId: "474072545"
+};
+firebase.initializeApp(config);
+var storageRef = firebase.storage().ref();
+var imgyRef = storageRef.child('imgy.jpg');
 
 var botConnectorOptions = {
   appId: "c8431942-19ab-42a1-b6c1-457eb8398648",
@@ -47,42 +55,54 @@ dialog.matches('Greeting',[
         });
       };
 
-      download('https://www.google.com/images/srpr/logo3w.png', 'imgy.png', function(){
-        console.log('doneeee');
-        console.log("DFSDGSDFGSDFSD");
-      // The path to the local image file, e.g. "/path/to/image.png"
-      // const fileName = '/path/to/image.png';
+      download(results.response.contentUrl, 'imgy.png', function(){
+        console.log('done');
 
-      // Performs logo detection on the local file
-      vision.detectLogos("imgy.png")
-        .then((results) => {
-          const logos = results[0];
+                // function to encode file data to base64 encoded string
+        function base64_encode(file) {
+            // read binary data
+            var bitmap = fs.readFileSync(file);
+            // convert binary data to base64 encoded string
+            return new Buffer(bitmap).toString('base64');
+        }
 
-          console.log('Logos:');
-          logos.forEach((logo) => console.log(logo));
+        // function to create file from base64 encoded string
+        function base64_decode(base64str, file) {
+            // create buffer object from base64 encoded string, it is important to tell the constructor that the string is base64 encoded
+            var bitmap = new Buffer(base64str, 'base64');
+            // write buffer to file
+            fs.writeFileSync(file, bitmap);
+            console.log('******** File created from base64 encoded string ********');
+        }
+
+        // convert image to base64 encoded string
+        var base64str = base64_encode('imgy.jpg');
+        console.log("base64",base64str);
+
+        storageRef.putString(base64str, 'base64').then(function(snapshot) {
+          console.log('Uploaded a base64 string!');
+
+          var options = { method: 'POST',
+            url: 'https://vision.googleapis.com/v1/images:annotate',
+            qs: { key: 'AIzaSyCVP_E8hjQHzd4nRAC9wrnFfpzkvOuypl4' },
+            headers:
+             {
+               accept: 'application/json',
+               'content-type': 'application/json' },
+            body:
+             { requests:
+                [ { features: [ { type: 'LOGO_DETECTION', maxResults: 3 } ],
+                    image: { source: { imageUri: storageRef.child('imgy.jpg').getDownloadURL() } } } ] },
+            json: true };
+          //results.response.contentUrl
+          request(options, function (error, response, body) {
+            if (error) throw new Error("GOOGLE ERROR: " + error);
+
+            console.log("GOOGLE BODY1: "+JSON.stringify(body));
+            console.log("GOOGLE BODY2: "+JSON.stringify(body.responses));
+            // console.log("GOOGLE BODY3: "+body.logoAnnotations.description);
+          });
         });
-        //hii
-
-        // var options = { method: 'POST',
-        //   url: 'https://vision.googleapis.com/v1/images:annotate',
-        //   qs: { key: 'AIzaSyCVP_E8hjQHzd4nRAC9wrnFfpzkvOuypl4' },
-        //   headers:
-        //    {
-        //      accept: 'application/json',
-        //      'content-type': 'application/json' },
-        //   body:
-        //    { requests:
-        //       [ { features: [ { type: 'LOGO_DETECTION', maxResults: 3 } ],
-        //           image: { source: { imageUri: 'imgy.png' } } } ] },
-        //   json: true };
-        // //results.response.contentUrl
-        // request(options, function (error, response, body) {
-        //   if (error) throw new Error("GOOGLE ERROR: " + error);
-        //
-        //   console.log("GOOGLE BODY1: "+JSON.stringify(body));
-        //   console.log("GOOGLE BODY2: "+JSON.stringify(body.responses));
-        //   // console.log("GOOGLE BODY3: "+body.logoAnnotations.description);
-        // });
       });
     }
 ]);

@@ -1,7 +1,6 @@
 {
   "name": "stockme",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
@@ -11,11 +10,19 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@google-cloud/vision": "^0.11.0",
     "botbuilder": "^3.7.0",
+    "firebase": "^3.7.4",
     "fs": "0.0.1-security",
-    "google-cloud": "^0.50.0",
     "request": "^2.81.0",
     "restify": "^4.3.0"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Dhanush123/stockme.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Dhanush123/stockme/issues"
+  },
+  "homepage": "https://github.com/Dhanush123/stockme#readme",
+  "description": ""
 }
