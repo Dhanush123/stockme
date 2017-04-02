@@ -3,8 +3,8 @@ var restify = require('restify');
 var request = require('request');
 var fs = require('fs');
 var cloudinary = require('cloudinary');
-
-     var crawler = require('img-crawler');
+var crawler = require('img-crawler');
+var https = require('https');
 
 cloudinary.config({
   cloud_name: 'octabytes',
