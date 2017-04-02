@@ -130,6 +130,9 @@ dialog.matches("bestFund",[
 
 dialog.matches("portfAnalysis",[
     function(session){
+      builder.Prompts.text(session, "Would you like to analyze your stock by the last month or year?");
+    },
+    function(session,results){
       var url =  "https://test3.blackrock.com/tools/hackathon/portfolio-analysis?calculateExposures=true&calculatePerformance=true&positions=AAPL~50%7CMSFT~50%7C&useCache=true";
    https.get(url, function(res) {
              var body = '';
@@ -142,7 +145,7 @@ dialog.matches("portfAnalysis",[
             var speechOutput;
             var data = JSON.parse(body);
             var performance = 0;
-            var yearMonthDay = "year";
+            var yearMonthDay = results.response;
             if (yearMonthDay === "year") {
             performance = data.resultMap.PORTFOLIOS[0].portfolios[0].returns.latestPerf.oneYear;
             }
