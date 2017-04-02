@@ -70,6 +70,7 @@ dialog.matches('Greeting',[
 
               console.log("GOOGLE BODY1: "+JSON.stringify(body));
               console.log("GOOGLE BODY2: "+JSON.stringify(body.responses));
+              if(body.responses[0].logoAnnotations[0].description){
               company = body.responses[0].logoAnnotations[0].description;
               console.log("descrip:"+company);
               var options = { method: 'GET',
@@ -93,6 +94,10 @@ dialog.matches('Greeting',[
                 console.log("ticker: "+ticker);
                 session.send('I believe this image contains the logo of ' + company + " and it has the ticker: " + ticker + ".\nFeel free to ask me more about this or other companies!");
               });
+            }
+            else{
+              session.send("Unfortunately, I couldn't find what company, if any, is in the picture you sent me. Perhaps try later or with a different picture.");
+            }
               // console.log("GOOGLE BODY3: "+body.logoAnnotations.description);
             });
 
