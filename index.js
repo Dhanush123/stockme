@@ -46,6 +46,7 @@ dialog.matches('Greeting',[
 
       var urle = "";
       urle = results.response.contentUrl;
+      console.log("urle: "+urle);
 
 
 var options = { method: 'POST',
