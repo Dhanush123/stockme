@@ -50,7 +50,7 @@ dialog.matches('Greeting',[
       // request(url, {encoding: 'binary'}, function(error, response, body) {
       //   fs.writeFile('imgy.jpg', body, 'binary', function (err) {
           console.log('done');
-          cloudinary.uploader.upload(results.response.contentUrl, function(result) { console.log(result) },
+          cloudinary.uploader.upload("https://www.fineprintnyc.com/images/blog/coke-logo/coke-logo-10.jpg", function(result) { console.log(result) },
                                      { public_id: "imgy" });
 
 
