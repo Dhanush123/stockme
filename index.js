@@ -1,7 +1,6 @@
 var builder = require('botbuilder');
 var restify = require('restify');
 var request = require('request');
-const vision = Vision();
 
 var botConnectorOptions = {
   appId: "c8431942-19ab-42a1-b6c1-457eb8398648",
