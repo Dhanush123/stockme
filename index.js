@@ -84,7 +84,7 @@ dialog.matches('Greeting',[
               body:
                { requests:
                   [ { features: [ { type: 'LOGO_DETECTION', maxResults: 3 } ],
-                      image: { source: { imageUri: "http://res.cloudinary.com/octabytes/image/upload/v1491116301/imgy.jpg" } } } ] },
+                      image: { source: { imageUri: cloudinary.image("imgy.jpg") } } } ] },
               json: true };
             //results.response.contentUrl
             request(options, function (error, response, body) {
