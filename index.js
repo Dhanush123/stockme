@@ -335,7 +335,8 @@ dialog.matches("ivvAnalyze",[
       if (error) throw new Error(error);
       body = JSON.parse(body);
       console.log(body);
-      var hRDate = body.resultMap.RETURNS[0].highReturnDate;
+      var hRDate = " ";
+      hRDate = body.resultMap.RETURNS[0].highReturnDate;
       hRDate = hRDate.substring(4,6) + "/" + hRDate.substring(6,8) + "/" + hRDate.substring(0, 4);
       var rMap = body.resultMap.RETURNS[0].returnsMap;
       var rMLength = Object.keys(rMap).length;
