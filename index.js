@@ -243,7 +243,7 @@ dialog.matches("stockAnalyze",[
 dialog.matches("stocksCompare",[
   function(session){
     builder.Prompts.text(session,"Which 2 stocks do you want to analyze? (Ticker name is appreciated)");
-  }
+  },
   function(session,results){
     var two = results.response.split(/\b(\s)/);
     var finalMsg = "";
