@@ -10,6 +10,7 @@ var connector = new builder.ChatConnector(botConnectorOptions);
 var bot = new builder.UniversalBot(connector);
 var server = restify.createServer();
 
+server.post("/api/messages",connector.listen());
 server.listen((process.env.PORT || 8000), function () {
   console.log("Server listening");
 });
