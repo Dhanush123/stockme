@@ -47,9 +47,13 @@ dialog.matches('Greeting',[
         json: true };
 
       request(options, function (error, response, body) {
-        if (error) throw new Error(error);
-
-        console.log(body);
+        if (error){
+          console.log("GOOGLE ERROR: "+error);
+          throw new Error(error);
+        }
+        else{
+          console.log("GOOGLE BODY: "+body);
+        }
       });
     }
 ]);
