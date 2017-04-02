@@ -162,7 +162,7 @@ dialog.matches("portfAnalysis",[
             }
             performance = (performance* 100).toFixed(2);
 
-            finalMsg = "Your stock ";
+            finalMsg = "Your total stocks' value ";
             if (performance < 0) {
             finalMsg += "went down by ";
             }
