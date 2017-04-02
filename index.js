@@ -120,7 +120,7 @@ dialog.matches("bestFund",[
                  });
 
           res.on('end', function () {
-                 var data = JSON.parse(body);
+
                  var fundName = data.resultMap.SEARCH_RESULTS[0].resultList[0].fundFamilyName;
                  var finalMsg = fundName+" is a great fund based on my analysis!";
                  session.send(finalMsg);
@@ -148,7 +148,7 @@ dialog.matches("portfAnalysis",[
 
              res.on('end', function () {
             var finalMsg;
-            var data = JSON.parse(body);
+
             var performance = 0;
             var yearMonthDay = results.response;
             if (yearMonthDay === "year") {
@@ -205,7 +205,7 @@ dialog.matches("stockAnalyze",[
       });
 
       res.on('end', function() {
-          var data = JSON.parse(body);
+
           var url2 = "https://test3.blackrock.com/tools/hackathon/performance?identifiers=" + stock + "&outputDataExpression=resultMap['RETURNS'][0].latestPerf" + "&useCache=true";
           https.get(url2, function(res) {
               var body = '';
@@ -215,7 +215,7 @@ dialog.matches("stockAnalyze",[
               });
 
               res.on('end', function() {
-                  var data = JSON.parse(body);
+
                   var performace = (data.oneDay * 100).toFixed(2);
                   //var performace = (data.resultMap.RETURNS[0].latestPerf.oneDay * 100).toFixed(2);
                   finalMsg = stock + "'s stock ";
@@ -233,6 +233,86 @@ dialog.matches("stockAnalyze",[
               console.log("Got error: ", e);
           });
               //eventCallback(stringResult);
+          });
+      }).on('error', function(e) {
+          console.log("Got error: ", e);
+      });
+  }
+]);
+
+dialog.matches("stocksCompare",[
+  function(session){
+    builder.Prompts.text(session,"Which 2 stocks do you want to analyze? (Ticker name is appreciated)");
+  }
+  function(session,results){
+    var two = results.response.split(/\b(\s)/);
+    var finalMsg = "";
+    var performance1 = 0;
+    var performance2 = 0;
+    var url = "https://test3.blackrock.com/tools/hackathon/search-securities" +
+      "?filters=assetType%3AStock%2C%20countryCode%3AUS&useCache=true&queryField=description" + "&query=" + two[0];
+  https.get(url, function(res) {
+      var body = '';
+
+      res.on('data', function(chunk) {
+          body += chunk;
+      });
+
+      res.on('end', function() {
+
+          var url = "https://test3.blackrock.com/tools/hackathon/performance?identifiers=" + two[0] + "&outputDataExpression=resultMap['RETURNS'][0].latestPerf" + "&useCache=true";
+          https.get(url, function(res) {
+              var body = '';
+
+              res.on('data', function(chunk) {
+                  body += chunk;
+              });
+
+              res.on('end', function() {
+
+                  performace1 = (data.oneDay * 100).toFixed(2);
+
+                  var url3 = "https://test3.blackrock.com/tools/hackathon/search-securities" +
+                    "?filters=assetType%3AStock%2C%20countryCode%3AUS&useCache=true&queryField=description" + "&query=" + two[1];
+                https.get(url3, function(res) {
+                    var body = '';
+
+                    res.on('data', function(chunk) {
+                        body += chunk;
+                    });
+
+                    res.on('end', function() {
+
+                        var url3 = "https://test3.blackrock.com/tools/hackathon/performance?identifiers=" + two[1] + "&outputDataExpression=resultMap['RETURNS'][0].latestPerf" + "&useCache=true";
+                        https.get(url3, function(res) {
+                            var body = '';
+
+                            res.on('data', function(chunk) {
+                                body += chunk;
+                            });
+
+                            res.on('end', function() {
+
+                                performace2 = (data.oneDay * 100).toFixed(2);
+
+                                if(performace2 > performace1){
+                                  session.send(two[1] + " at " + performace2 +"%" + " is doing better than " + two[0] + " by " + (performance2-performance1) + "%");
+                                }
+                                else{
+                                  session.send(two[0] + " at " + performace1 +"%" + " is doing better than " + two[1] + " by " + (performance1-performance2) + "%");
+                                }
+                            });
+                        }).on('error', function(e) {
+                            console.log("Got error: ", e);
+                        });
+                        });
+                    }).on('error', function(e) {
+                        console.log("Got error: ", e);
+                    });
+              });
+          }).on('error', function(e) {
+              console.log("Got error: ", e);
+          });
           });
       }).on('error', function(e) {
           console.log("Got error: ", e);
