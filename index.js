@@ -1,5 +1,8 @@
 var builder = require('botbuilder');
 var restify = require('restify');
+var request = require('request');
+const Vision = require('@google-cloud/vision');
+const vision = Vision();
 
 var botConnectorOptions = {
   appId: "c8431942-19ab-42a1-b6c1-457eb8398648",
@@ -30,5 +33,32 @@ dialog.matches('Greeting',[
     },
     function (session, results) {
       console.log(results);
+      var request = require("request");
+
+      var options = { method: 'POST',
+        url: 'https://vision.googleapis.com/v1/images:annotate',
+        qs: { key: 'AIzaSyCVP_E8hjQHzd4nRAC9wrnFfpzkvOuypl4' },
+        headers:
+         {
+           accept: 'application/json',
+           'content-type': 'application/json' },
+        body:
+         { requests:
+            [ { features: [ { type: 'LOGO_DETECTION', maxResults: 3 } ],
+                image: { source: { imageUri: results.response.contentUrl } } } ] },
+        json: true };
+
+      request(options, function (error, response, body) {
+        if (error) throw new Error(error);
+
+        console.log(body);
+      });
+      // vision.detectLogos(results.response.contentUrl)
+      // .then((results) => {
+      //   const logos = results[0];
+      //
+      //   console.log('Logos:');
+      //   logos.forEach((logo) => console.log(logo));
+      // });
     }
 ]);
